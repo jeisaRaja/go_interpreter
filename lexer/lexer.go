@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"jeisaraja/interpreter/token"
-	"log"
 )
 
 type Lexer struct {
@@ -54,13 +53,26 @@ func (l *Lexer) readNumber() string {
 
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
+
 	l.skipWhitespace()
-	log.Println(byte('\n'))
+
 	switch l.ch {
 	case '=':
 		tok = NewToken(token.ASSIGN, l.ch)
 	case '+':
 		tok = NewToken(token.PLUS, l.ch)
+	case '-':
+		tok = NewToken(token.MINUS, l.ch)
+	case '!':
+		tok = NewToken(token.BANG, l.ch)
+	case '/':
+		tok = NewToken(token.SLASH, l.ch)
+	case '*':
+		tok = NewToken(token.ASTERISK, l.ch)
+	case '<':
+		tok = NewToken(token.LT, l.ch)
+	case '>':
+		tok = NewToken(token.GT, l.ch)
 	case ',':
 		tok = NewToken(token.COMMA, l.ch)
 	case ';':
@@ -86,7 +98,7 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Type = token.INT
 			return tok
 		} else {
-			return NewToken(token.ILLEGAL, l.ch)
+			tok = NewToken(token.ILLEGAL, l.ch)
 		}
 	}
 	l.readChar()

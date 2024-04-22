@@ -23,13 +23,20 @@ const (
 	// ILLEGAL signifies a token/character we don’t know about
 	ILLEGAL = "ILLEGAL"
 	// EOF is end of line
-	EOF     = "EOF"
+	EOF = "EOF"
 
 	IDENT = "IDENT"
 	INT   = "INT"
 
-	ASSIGN = "="
-	PLUS   = "+"
+	ASSIGN   = "="
+	PLUS     = "+"
+	MINUS    = "-"
+	BANG     = "!"
+	ASTERISK = "*"
+	SLASH    = "/"
+
+	GT = ">"
+	LT = "<"
 
 	COMMA     = ","
 	SEMICOLON = ";"
@@ -42,4 +49,3 @@ const (
 	FUNCTION = "FUNCTIOn"
 	LET      = "LET"
 )
-
