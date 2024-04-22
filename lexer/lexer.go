@@ -1,6 +1,9 @@
 package lexer
 
-import "jeisaraja/interpreter/token"
+import (
+	"jeisaraja/interpreter/token"
+	"log"
+)
 
 type Lexer struct {
 	input        string
@@ -27,9 +30,32 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
+func (l *Lexer) readIdentifier() string {
+	position := l.position
+	for isLetter(l.ch) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
+func (l *Lexer) skipWhitespace() {
+	if l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
+func (l *Lexer) readNumber() string {
+	position := l.position
+	for isNumber(l.ch) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
-
+	l.skipWhitespace()
+	log.Println(byte('\n'))
 	switch l.ch {
 	case '=':
 		tok = NewToken(token.ASSIGN, l.ch)
@@ -50,6 +76,18 @@ func (l *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Literal = "EOF"
 		tok.Type = token.EOF
+	default:
+		if isLetter(l.ch) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+		} else if isNumber(l.ch) {
+			tok.Literal = l.readNumber()
+			tok.Type = token.INT
+			return tok
+		} else {
+			return NewToken(token.ILLEGAL, l.ch)
+		}
 	}
 	l.readChar()
 	return tok
@@ -57,4 +95,12 @@ func (l *Lexer) NextToken() token.Token {
 
 func NewToken(Type token.TokenType, ch byte) token.Token {
 	return token.Token{Type: Type, Literal: string(ch)}
+}
+
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+func isNumber(ch byte) bool {
+	return '0' <= ch && ch <= '9'
 }

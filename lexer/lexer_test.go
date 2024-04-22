@@ -8,11 +8,14 @@ import (
 
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
- let ten = 10;
- let add = fn(x, y) {
- x + y;
- };
- let result = add(five, ten)`
+	let ten = 10;
+	let add = fn(x, y) {
+	x + y;
+	};
+	let result = add(five, ten);
+	!-/*5;
+	5 < 10 > 5;
+	`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -54,14 +57,14 @@ func TestNextToken(t *testing.T) {
 		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
-		{token.EOF, ""},
+		{token.EOF, "EOF"},
 	}
 
 	l := New(input)
 
 	for i, tt := range tests {
 		tok := l.NextToken()
-		log.Println(tok.Literal, tt.expectedLiteral)
+		log.Println(i+1, tt, tok)
 		if tok.Type != tt.expectedType {
 			t.Fatalf("tests[%d] - token type wrong. expected %q, got %q", i, tt.expectedType, tok.Type)
 		}
