@@ -10,6 +10,11 @@ type Token struct {
 var keywords = map[string]TokenType{
 	"fn":  FUNCTION,
 	"let": LET,
+  "if": IF,
+  "return": RETURN,
+  "else": ELSE,
+  "true": TRUE,
+  "false": FALSE,
 }
 
 func LookupIdent(ident string) TokenType {
@@ -46,6 +51,11 @@ const (
 	LBRACE = "{"
 	RBRACE = "}"
 
-	FUNCTION = "FUNCTIOn"
+	FUNCTION = "FUNCTION"
 	LET      = "LET"
+  IF       = "IF"
+  RETURN   = "RETURN"
+  TRUE     = "TRUE"
+  FALSE    = "FALSE"
+  ELSE     = "ELSE"
 )
