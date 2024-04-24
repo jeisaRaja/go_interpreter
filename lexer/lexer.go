@@ -124,7 +124,6 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 	l.readChar()
-  log.Println("tok is actualy", tok)
 	return tok
 }
 
