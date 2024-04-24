@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"jeisaraja/interpreter/token"
+	"log"
 )
 
 type Lexer struct {
@@ -17,6 +18,14 @@ func New(input string) *Lexer {
 	}
 	l.readChar()
 	return l
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition > len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
 }
 
 func (l *Lexer) readChar() {
@@ -38,7 +47,7 @@ func (l *Lexer) readIdentifier() string {
 }
 
 func (l *Lexer) skipWhitespace() {
-	if l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
 	}
 }
@@ -58,13 +67,26 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '=':
-		tok = NewToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+      log.Println("token is ", tok)
+		} else {
+			tok = NewToken(token.ASSIGN, l.ch)
+		}
 	case '+':
 		tok = NewToken(token.PLUS, l.ch)
 	case '-':
 		tok = NewToken(token.MINUS, l.ch)
 	case '!':
-		tok = NewToken(token.BANG, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = NewToken(token.BANG, l.ch)
+		}
 	case '/':
 		tok = NewToken(token.SLASH, l.ch)
 	case '*':
@@ -86,7 +108,7 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		tok = NewToken(token.RBRACE, l.ch)
 	case 0:
-		tok.Literal = "EOF"
+		tok.Literal = ""
 		tok.Type = token.EOF
 	default:
 		if isLetter(l.ch) {
@@ -102,6 +124,7 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 	l.readChar()
+  log.Println("tok is actualy", tok)
 	return tok
 }
 
