@@ -21,7 +21,7 @@ func TestLetStatement(t *testing.T) {
 		t.Fatalf("ParseProgram() returned nill")
 	}
 	if len(program.Statements) != 3 {
-		t.Fatalf("program.Statements does not contain 3 statements. got =%d", len(program.Statements))
+		t.Fatalf("program.Statements does not contain 3 statements. got = %d", len(program.Statements))
 	}
 
 	tests := []struct {
