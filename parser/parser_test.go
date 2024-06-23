@@ -17,11 +17,18 @@ func TestLetStatement(t *testing.T) {
 	p := New(l)
 
 	program := p.ParseProgram()
+
 	if program == nil {
 		t.Fatalf("ParseProgram() returned nill")
 	}
+
 	if len(program.Statements) != 3 {
 		t.Fatalf("program.Statements does not contain 3 statements. got = %d", len(program.Statements))
+	}
+
+	for i, stmt := range program.Statements {
+		t.Logf("Statement %d: %+v", i, stmt)
+		t.Logf("Type: %T", stmt)
 	}
 
 	tests := []struct {
