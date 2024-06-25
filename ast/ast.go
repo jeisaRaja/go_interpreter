@@ -1,9 +1,13 @@
 package ast
 
-import "jeisaraja/interpreter/token"
+import (
+	"bytes"
+	"jeisaraja/interpreter/token"
+)
 
 type Node interface {
 	TokenLiteral() string
+	String() string
 }
 
 type Statement interface {
@@ -15,6 +19,14 @@ type Expression interface {
 	Node
 	expressionNode()
 }
+
+type ExpressionStatement struct {
+	Token      token.Token
+	Expression Expression
+}
+
+func (es *ExpressionStatement) statementNode()       {}
+func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 
 type Program struct {
 	Statements []Statement
@@ -28,6 +40,16 @@ func (p *Program) TokenLiteral() string {
 	}
 }
 
+func (p *Program) String() string {
+	var out bytes.Buffer
+
+	for _, s := range p.Statements {
+		out.WriteString(s.String())
+	}
+
+	return out.String()
+}
+
 type LetStatement struct {
 	Token token.Token
 	Name  *Identifier
@@ -38,6 +60,21 @@ func (ls *LetStatement) statementNode() {}
 
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
+func (ls *LetStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString((ls.TokenLiteral() + " "))
+	out.WriteString(ls.Name.String())
+	out.WriteString(" = ")
+
+	if ls.Value != nil {
+		out.WriteString(ls.Value.String())
+	}
+
+	out.WriteString(";")
+	return out.String()
+}
+
 type Identifier struct {
 	Token token.Token
 	Value string
@@ -46,6 +83,9 @@ type Identifier struct {
 func (i *Identifier) expressionNode() {}
 func (i *Identifier) TokenLiteral() string {
 	return i.Token.Literal
+}
+func (i *Identifier) String() string {
+	return i.Value
 }
 
 type ReturnStatement struct {
