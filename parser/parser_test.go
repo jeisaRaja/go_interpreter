@@ -177,8 +177,8 @@ func TestIntegerLiteralExpression(t *testing.T) {
 
 func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
-		inputstring
-		operatorstring
+		input        string
+		operator     string
 		integerValue int64
 	}{
 		{"!5;", "!", 5},
