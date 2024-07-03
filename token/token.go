@@ -24,17 +24,7 @@ func LookupIdent(ident string) TokenType {
 	return IDENT
 }
 
-const (
-	_ int = iota
-	LOWEST
-	EQUALS
-	// ==
-	LESSGREATER // > or <
-	SUM         // +
-	PRODUCT     // *
-	PREFIX      // -X or !X
-	CALL        // myFunction(X)
-)
+
 
 const (
 	// ILLEGAL signifies a token/character we don’t know about
