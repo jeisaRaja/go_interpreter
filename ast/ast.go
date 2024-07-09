@@ -5,7 +5,6 @@ import (
 	"jeisaraja/interpreter/token"
 )
 
-
 type Node interface {
 	TokenLiteral() string
 	String() string
@@ -163,3 +162,12 @@ func (ie *InfixExpression) String() string {
 
 	return out.String()
 }
+
+type Boolean struct {
+	Value bool
+	Token token.Token
+}
+
+func (b *Boolean) String() string       { return b.Token.Literal }
+func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
+func (b *Boolean) expressionNode()      {}
