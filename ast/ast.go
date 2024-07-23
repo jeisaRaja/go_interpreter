@@ -245,7 +245,7 @@ func (fl *FunctionLiteral) TokenLiteral() string {
 type CallExpression struct {
 	Token     token.Token
 	Function  Expression
-	Arguments []*Identifier
+	Arguments []Expression
 }
 
 func (ce *CallExpression) expressionNode() {}
@@ -259,7 +259,7 @@ func (ce *CallExpression) String() string {
 	out.WriteString("(")
 	var args = []string{}
 	for _, arg := range ce.Arguments {
-		args = append(args, arg.Token.Literal)
+		args = append(args, arg.TokenLiteral())
 	}
 	out.WriteString(strings.Join(args, ", "))
 	out.WriteString(")")
