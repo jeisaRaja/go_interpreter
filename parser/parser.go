@@ -88,7 +88,6 @@ func (p *Parser) Errors() []string {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	fmt.Println(p.curToken, p.peekToken)
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
@@ -195,7 +194,6 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 	prefix := p.prefixParseFns[p.curToken.Type]
-	fmt.Println(p.curToken)
 	if prefix == nil {
 		p.noPrefixParseFnError(p.curToken.Type)
 		return nil
@@ -310,7 +308,6 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		exp.Alternative = p.parseBlockStatement()
 	}
 
-	fmt.Println("after parsing if statement ", exp.String())
 	return exp
 }
 
@@ -335,7 +332,6 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	}
 
 	fn.Parameters = p.parseFunctionParameters()
-
 	if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
@@ -351,6 +347,8 @@ func (p *Parser) parseFunctionParameters() []*ast.Identifier {
 		p.nextToken()
 		return identifiers
 	}
+
+	p.nextToken()
 	ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 	identifiers = append(identifiers, ident)
 
