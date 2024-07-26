@@ -138,6 +138,9 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 		return nil
 	}
 
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -148,6 +151,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 
 	p.nextToken()
+
+	stmt.ReturnValue = p.parseExpression(LOWEST)
 
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
@@ -382,15 +387,15 @@ func (p *Parser) parseCallArguments() []ast.Expression {
 	}
 	p.nextToken()
 	args = append(args, p.parseExpression(LOWEST))
-  for p.peekTokenIs(token.COMMA){
-    p.nextToken()
-    p.nextToken()
-    
-    fmt.Println("cur token is ", p.curToken)
-    args = append(args, p.parseExpression(LOWEST))
-  }
-  if !p.expectPeek(token.RPAREN){
-    return nil
-  }
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+
+		fmt.Println("cur token is ", p.curToken)
+		args = append(args, p.parseExpression(LOWEST))
+	}
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
 	return args
 }
