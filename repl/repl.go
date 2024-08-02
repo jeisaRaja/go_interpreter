@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"jeisaraja/interpreter/evaluator"
 	"jeisaraja/interpreter/lexer"
 	"jeisaraja/interpreter/parser"
 )
@@ -15,7 +16,6 @@ func Start(in io.Reader, out io.Writer) {
 	for {
 		fmt.Print(PROMPT)
 		scanned := scanner.Scan()
-		fmt.Println(scanned)
 		if !scanned {
 			return
 		}
@@ -28,10 +28,12 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
+		}
 	}
-
 }
 
 func printParserErrors(out io.Writer, errors []string) {
