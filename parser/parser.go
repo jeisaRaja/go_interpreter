@@ -391,7 +391,6 @@ func (p *Parser) parseCallArguments() []ast.Expression {
 		p.nextToken()
 		p.nextToken()
 
-		fmt.Println("cur token is ", p.curToken)
 		args = append(args, p.parseExpression(LOWEST))
 	}
 	if !p.expectPeek(token.RPAREN) {
