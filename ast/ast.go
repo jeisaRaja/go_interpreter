@@ -243,8 +243,8 @@ func (fl *FunctionLiteral) TokenLiteral() string {
 }
 
 type CallExpression struct {
-	Token     token.Token
-	Function  Expression
+	Token     token.Token // The '(' Token
+	Function  Expression  // Identifier or Function Literal
 	Arguments []Expression
 }
 
@@ -264,4 +264,17 @@ func (ce *CallExpression) String() string {
 	out.WriteString(strings.Join(args, ", "))
 	out.WriteString(")")
 	return out.String()
+}
+
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+
+func (sl *StringLiteral) expressionNode() {}
+func (sl *StringLiteral) TokenLiteral() string {
+	return sl.Token.Literal
+}
+func (sl *StringLiteral) String() string {
+	return sl.Token.Literal
 }

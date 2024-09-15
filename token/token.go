@@ -24,8 +24,6 @@ func LookupIdent(ident string) TokenType {
 	return IDENT
 }
 
-
-
 const (
 	// ILLEGAL signifies a token/character we don’t know about
 	ILLEGAL = "ILLEGAL"
@@ -62,4 +60,6 @@ const (
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
 	ELSE     = "ELSE"
+
+	STRING = "STRING"
 )
